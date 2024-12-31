@@ -103,7 +103,13 @@ class LocalSearch {
 
   getResultItems (keywords) {
     const resultItems = []
-    this.datas.forEach(({ title, content, url }) => {
+    // 源代码START
+    // this.datas.forEach(({ title, content, url }) => {
+    // 源代码END
+
+    // 魔改代码START
+    this.datas.forEach(({ title, content, url, categories, tags }) => {
+      // 魔改代码END
       // The number of different keywords included in the article.
       const [indexOfTitle, keysOfTitle] = this.getIndexByWord(keywords, title)
       const [indexOfContent, keysOfContent] = this.getIndexByWord(keywords, content)
@@ -150,16 +156,22 @@ class LocalSearch {
       url.searchParams.append('highlight', keywords.join(' '))
 
       if (slicesOfTitle.length !== 0) {
-        resultItem += `<li class="local-search-hit-item"><a href="${url.href}"><span class="search-result-title">${this.highlightKeyword(title, slicesOfTitle[0])}</span>`
+        resultItem += `<div class="local-search-hit-item"><a href="${url.href}"><span class="search-result-title">${this.highlightKeyword(title, slicesOfTitle[0])}</span>`
       } else {
-        resultItem += `<li class="local-search-hit-item"><a href="${url.href}"><span class="search-result-title">${title}</span>`
+        resultItem += `<div class="local-search-hit-item"><a href="${url.href}"><span class="search-result-title">${title}</span>`
       }
+
+      // 魔改代码START
+      tags.forEach(tag => {
+        resultItem += `<a class="search-result-tag" href="${GLOBAL_CONFIG.root + 'tags/' + tag + '/'}">${(GLOBAL_CONFIG.emoji && GLOBAL_CONFIG.emoji.tags && GLOBAL_CONFIG.emoji.tags[tag] || '') + tag}</a>`
+      })
+      // 魔改代码END
 
       slicesOfContent.forEach(slice => {
         resultItem += `<p class="search-result">${this.highlightKeyword(content, slice)}...</p></a>`
       })
 
-      resultItem += '</li>'
+      resultItem += '</div>'
       resultItems.push({
         item: resultItem,
         id: resultItems.length,
@@ -179,6 +191,11 @@ class LocalSearch {
         this.isfetched = true
         this.datas = isXml
           ? [...new DOMParser().parseFromString(res, 'text/xml').querySelectorAll('entry')].map(element => ({
+              // 魔改代码START
+              categories: [...element.querySelectorAll('category')].map(category => { return category.textContent.trim() }),
+              tags: [...element.querySelectorAll('tag')].map(tag => { return tag.textContent.trim() }),
+              // 魔改代码END
+              
               title: element.querySelector('title').textContent,
               content: element.querySelector('content').textContent,
               url: element.querySelector('url').textContent
@@ -281,7 +298,7 @@ window.addEventListener('load', () => {
 
       const stats = languages.hits_stats.replace(/\$\{hits}/, resultItems.length)
 
-      container.innerHTML = `<ol class="search-result-list">${resultItems.map(result => result.item).join('')}</ol>`
+      container.innerHTML = `<div class="search-result-list">${resultItems.map(result => result.item).join('')}</div>`
       statsItem.innerHTML = `<hr><div class="search-result-stats">${stats}</div>`
       window.pjax && window.pjax.refresh(container)
     }
@@ -301,7 +318,9 @@ window.addEventListener('load', () => {
   }
 
   const openSearch = () => {
-    btf.overflowPaddingR.add()
+    const bodyStyle = document.body.style
+    bodyStyle.width = '100%'
+    bodyStyle.overflow = 'hidden'
     btf.animateIn($searchMask, 'to_show 0.5s')
     btf.animateIn($searchDialog, 'titleScale 0.5s')
     setTimeout(() => { input.focus() }, 300)
@@ -323,7 +342,9 @@ window.addEventListener('load', () => {
   }
 
   const closeSearch = () => {
-    btf.overflowPaddingR.remove()
+    const bodyStyle = document.body.style
+    bodyStyle.width = ''
+    bodyStyle.overflow = ''
     btf.animateOut($searchDialog, 'search_close .5s')
     btf.animateOut($searchMask, 'to_hide 0.5s')
     window.removeEventListener('resize', fixSafariHeight)
@@ -357,4 +378,19 @@ window.addEventListener('load', () => {
     localSearch.highlightSearchWords(document.getElementById('article-container'))
     searchClickFn()
   })
+
+  // 魔改代码START
+  // 右键搜索
+  document.getElementById('menu-search').addEventListener('click', function () {
+    openSearch()
+    setTimeout(() => {
+      let $input = document.querySelector('#local-search-input input')
+      let event = document.createEvent("HTMLEvents");
+      event.initEvent("input", false, false);
+      $input.value = rightMenuContext.text
+      $input.dispatchEvent(event)
+    }, 100)
+  })
+  // 魔改代码END
+
 })
