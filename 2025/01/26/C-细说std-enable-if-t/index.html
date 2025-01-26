@@ -1,0 +1,207 @@
+<!DOCTYPE html><html lang="zn-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++细说std::enable_if_t | Dylan的空间</title><meta name="author" content="DylanUnicorn"><meta name="copyright" content="DylanUnicorn"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="C++细说std::enable_if_t1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253&#x2F;&#x2F;&#x2F;&#x2F; Created by liu on 2025&#x2F;1&#x2F;24.&#x2F;&#x2F;&#x2F;&#x2F; 模板示例程序#include &lt;iostream&gt;#include &lt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++细说std::enable_if_t">
+<meta property="og:url" content="https://dylanunicorn.github.io/2025/01/26/C-%E7%BB%86%E8%AF%B4std-enable-if-t/index.html">
+<meta property="og:site_name" content="Dylan的空间">
+<meta property="og:description" content="C++细说std::enable_if_t1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253&#x2F;&#x2F;&#x2F;&#x2F; Created by liu on 2025&#x2F;1&#x2F;24.&#x2F;&#x2F;&#x2F;&#x2F; 模板示例程序#include &lt;iostream&gt;#include &lt;">
+<meta property="og:locale" content="zn_CN">
+<meta property="og:image" content="https://dylanunicorn.github.io/img/bear.jpg">
+<meta property="article:published_time" content="2025-01-26T02:26:23.000Z">
+<meta property="article:modified_time" content="2025-01-26T02:31:45.371Z">
+<meta property="article:author" content="DylanUnicorn">
+<meta property="article:tag" content="C++ template">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dylanunicorn.github.io/img/bear.jpg"><link rel="shortcut icon" href="/img/bear.jpg"><link rel="canonical" href="https://dylanunicorn.github.io/2025/01/26/C-%E7%BB%86%E8%AF%B4std-enable-if-t/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++细说std::enable_if_t',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-01-26 10:31:45'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/bear.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/Categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><span> 分类</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog-info"> <a href="/" title="Dylan的空间"><img class="site-icon" src="/img/bear.jpg"/></a><a class="site-page" href="/" title="Dylan的空间"><span class="site-name">Dylan的空间</span><i class="fas fa-home"></i></a></span><span id="page_name"><a class="site-page" id="page-title" title="Back To Top" onclick="btf.scrollToDest(0, 500)"><span>Dylan的空间</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> 首页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><span> 归档</span></a></li><li><a class="site-page child" href="/tags/"><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><span> 分类</span></a></li></ul></div></div></div><div id="hotkey"><div id="setting-button" onclick="eurkon.switchRightSide();"><a class="site-page" href="javascript:void(0);" title="Setting"><i class="fas fa-screwdriver-wrench fa-fw"></i></a></div><div id="top-button"><a class="site-page" href="javascript:void(0);" title="Back To Top" onclick="btf.scrollToDest(0, 500)"><span class="scroll-percent"></span><i class="fas fa-arrow-up fa-fw"></i></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></div></nav><div id="post-cover"><img class="cover" id="post-cover-img" alt="cover"></div><div id="post-info"><div id="post-meta"><div class="meta-firstline"><span class="post-meta-categories"><i class="fas fa-shapes fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/Categories/C-template/">C++ template</a></span><span class="post-meta-tags"><span class="post-meta-separator">|</span><i class="fas fa-tags fa-fw post-meta-icon"></i><a class="post-meta-tags" href="/tags/C-template/">C++ template</a><span class="post-meta-separator">•</span><a class="post-meta-tags" href="/tags/C/">C++</a></span></div><h1 class="post-title">C++细说std::enable_if_t</h1><div class="meta-secondline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-01-26T02:26:23.000Z" title="Created 2025-01-26 10:26:23">2025-01-26</time></span><span class="post-meta-separator">|</span><span class="post-meta-date"><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-01-26T02:31:45.371Z" title="Updated 2025-01-26 10:31:45">2025-01-26</time></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="C++细说std::enable_if_t"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div><div id="post"><article class="post-content" id="article-container"><h1 id="C-细说std-enable-if-t"><a href="#C-细说std-enable-if-t" class="headerlink" title="C++细说std::enable_if_t"></a>C++细说std::enable_if_t</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Created by liu on 2025/1/24.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// 模板示例程序</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;type_traits&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// template&lt;typename T&gt;</span></span><br><span class="line"><span class="comment">// typename std::enable_if&lt;sizeof(T) == 4&gt;::type print_size(const T&amp; value)</span></span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">//     std::cout &lt;&lt; &quot;int32_t: &quot; &lt;&lt; sizeof(T) &lt;&lt; std::endl;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"><span class="comment">// // 换成 typename std::enable_if&lt;sizeof(T) == 4，T&gt;::type print_size(const T&amp; value)</span></span><br><span class="line"><span class="comment">// // 就不对，没有那个特化的函数签名，运行时报错</span></span><br><span class="line"><span class="comment">// template&lt;typename T&gt;</span></span><br><span class="line"><span class="comment">// typename std::enable_if&lt;sizeof(T) == 8&gt;::type print_size(const T&amp; value)</span></span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">//     std::cout &lt;&lt; &quot;int64_t: &quot; &lt;&lt; sizeof(T) &lt;&lt; std::endl;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用enable_if_t</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">std::<span class="type">enable_if_t</span>&lt;<span class="title">sizeof</span><span class="params">(T)</span> </span>== <span class="number">4</span>&gt; <span class="built_in">print_size</span>(<span class="type">const</span> T&amp; value)</span><br><span class="line">&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;int32_t: &quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(T) &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">std::<span class="type">enable_if_t</span>&lt;<span class="title">sizeof</span><span class="params">(T)</span> </span>== <span class="number">8</span>&gt; <span class="built_in">print_size</span>(<span class="type">const</span> T&amp; value)</span><br><span class="line">&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;int64_t: &quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(T) &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// // 使用if constexpr</span></span><br><span class="line"><span class="comment">// template &lt;typename T&gt;</span></span><br><span class="line"><span class="comment">// void print_size(const T&amp; value) &#123;</span></span><br><span class="line"><span class="comment">//     if constexpr (sizeof(T) == 4) &#123;</span></span><br><span class="line"><span class="comment">//         std::cout &lt;&lt; &quot;Size of T is 4 bytes&quot; &lt;&lt; std::endl;</span></span><br><span class="line"><span class="comment">//     &#125; else &#123;</span></span><br><span class="line"><span class="comment">//         std::cout &lt;&lt; &quot;Size of T is NOT 4 bytes&quot; &lt;&lt; std::endl;</span></span><br><span class="line"><span class="comment">//     &#125;</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int32_t</span> a = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int64_t</span> b = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">print_size</span>(a);</span><br><span class="line">    <span class="built_in">print_size</span>(b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="然后丢一点enable-if的定义"><a href="#然后丢一点enable-if的定义" class="headerlink" title="然后丢一点enable_if的定义"></a>然后丢一点enable_if的定义</h2><h3 id="1-enable-if模板的基本原理"><a href="#1-enable-if模板的基本原理" class="headerlink" title="1. enable_if模板的基本原理"></a>1. <strong><code>enable_if</code>模板的基本原理</strong></h3><p><code>enable_if</code>模板的作用是根据一个布尔条件<code>_Test</code>来决定是否提供一个类型成员<code>type</code>。如果条件为<code>true</code>，则提供<code>type</code>；如果条件为<code>false</code>，则不提供<code>type</code>。</p>
+<h4 id="普通模板定义"><a href="#普通模板定义" class="headerlink" title="普通模板定义"></a>普通模板定义</h4><p>cpp复制</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="type">bool</span> _Test, <span class="keyword">class</span> <span class="title class_">_Ty</span> = <span class="type">void</span>&gt;</span><br><span class="line"><span class="keyword">struct</span> enable_if &#123;&#125;; <span class="comment">// no member &quot;type&quot; when !_Test</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>这是一个模板结构体<code>enable_if</code>，它有两个模板参数：</p>
+<ul>
+<li><p><code>_Test</code>：一个布尔值，用于控制是否提供<code>type</code>。</p>
+</li>
+<li><p><code>_Ty</code>：一个类型，默认为<code>void</code>，表示当<code>_Test</code>为<code>true</code>时，<code>type</code>的类型。</p>
+</li>
+</ul>
+</li>
+<li><p>当<code>_Test</code>为<code>false</code>时，<code>enable_if</code>结构体中没有任何成员，特别是没有<code>type</code>成员。</p>
+</li>
+</ul>
+<h4 id="特化模板定义"><a href="#特化模板定义" class="headerlink" title="特化模板定义"></a>特化模板定义</h4><p>cpp复制</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">_Ty</span>&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">enable_if</span>&lt;<span class="literal">true</span>, _Ty&gt; &#123; <span class="comment">// type is _Ty for _Test</span></span><br><span class="line">    <span class="keyword">using</span> type = _Ty;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>这是一个模板特化，专门处理<code>_Test</code>为<code>true</code>的情况。</p>
+</li>
+<li><p>当<code>_Test</code>为<code>true</code>时，<code>enable_if</code>结构体中定义了一个类型成员<code>type</code>，其类型为<code>_Ty</code>。</p>
+</li>
+</ul>
+<h3 id="2-enable-if-t的定义"><a href="#2-enable-if-t的定义" class="headerlink" title="2. enable_if_t的定义"></a>2. <strong><code>enable_if_t</code>的定义</strong></h3><p>cpp复制</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="type">bool</span> _Test, <span class="keyword">class</span> <span class="title class_">_Ty</span> = <span class="type">void</span>&gt;</span><br><span class="line"><span class="keyword">using</span> <span class="type">enable_if_t</span> = <span class="keyword">typename</span> enable_if&lt;_Test, _Ty&gt;::type;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>enable_if_t</code>是一个类型别名（<code>using</code>语法），它简化了<code>enable_if</code>的使用。</p>
+</li>
+<li><p>它的作用是直接获取<code>enable_if&lt;_Test, _Ty&gt;::type</code>的类型。</p>
+</li>
+<li><p>如果<code>_Test</code>为<code>false</code>，<code>enable_if&lt;_Test, _Ty&gt;</code>中没有<code>type</code>成员，因此<code>enable_if_t</code>会导致编译错误。</p>
+</li>
+<li><p>如果<code>_Test</code>为<code>true</code>，<code>enable_if_t</code>的类型就是<code>_Ty</code>。</p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info">C++细说std::enable_if_t</span></div><div class="post-copyright__url"><span class="post-copyright-info"><a id="post-url" href="https://dylanunicorn.github.io/2025/01/26/C-%E7%BB%86%E8%AF%B4std-enable-if-t/">https://dylanunicorn.github.io/2025/01/26/C-%E7%BB%86%E8%AF%B4std-enable-if-t/</a><a id="post-url-copy" title="复制文章链接" onclick="btf.copyFn(&quot;https://dylanunicorn.github.io/2025/01/26/C-%E7%BB%86%E8%AF%B4std-enable-if-t/&quot;)"><i class="fas fa-paste copy-button"></i></a></span></div><div class="post-copyright__cc"><span class="post-copyright-info">转载前请阅读本站 <a href="/protocol/copyright/" title="本站所有原创文章采用知识共享(Creative Commons)署名—非商业性使用—相同方式共享4.0国际公共许可协议">版权协议</a>，文章著作权归 <a href="https://dylanunicorn.github.io">DylanUnicorn</a> 所有，转载请注明出处。</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C-template/">C++ template</a><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="post_share"><div class="social-share" data-image="/img/bear.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/12/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%AB%98%E7%B2%BE%E5%BA%A6%E5%8A%A0%E6%B3%95/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info"></div><div class="content">1234title: 数据结构-高进度加法date: 2024-12-31 07:32:42categories:     - 数据结构tags:     - 高精度加法
+
+
+</div></div></a></div></nav></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/bear.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">DylanUnicorn</div><div class="author-info__description">随便写写，主要是学习笔记</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/Categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/DylanUnicorn"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-%E7%BB%86%E8%AF%B4std-enable-if-t"><span class="toc-number">1.</span> <span class="toc-text">C++细说std::enable_if_t</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%84%B6%E5%90%8E%E4%B8%A2%E4%B8%80%E7%82%B9enable-if%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.</span> <span class="toc-text">然后丢一点enable_if的定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-enable-if%E6%A8%A1%E6%9D%BF%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.1.</span> <span class="toc-text">1. enable_if模板的基本原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%99%AE%E9%80%9A%E6%A8%A1%E6%9D%BF%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">普通模板定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%89%B9%E5%8C%96%E6%A8%A1%E6%9D%BF%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">特化模板定义</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-enable-if-t%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.2.</span> <span class="toc-text">2. enable_if_t的定义</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/26/C-%E7%BB%86%E8%AF%B4std-enable-if-t/" title="C++细说std::enable_if_t">C++细说std::enable_if_t</a><time datetime="2025-01-26T02:26:23.000Z" title="Created 2025-01-26 10:26:23">2025-01-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/31/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E9%AB%98%E7%B2%BE%E5%BA%A6%E5%8A%A0%E6%B3%95/" title="Untitled">Untitled</a><time datetime="2024-12-31T08:49:48.111Z" title="Created 2024-12-31 16:49:48">2024-12-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/31/My-new-post/" title="My new post">My new post</a><time datetime="2024-12-31T06:47:20.000Z" title="Created 2024-12-31 14:47:20">2024-12-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/03/%E7%AC%AC%E4%B8%80%E7%AF%87/" title="第一篇">第一篇</a><time datetime="2024-12-02T23:32:42.000Z" title="Created 2024-12-03 07:32:42">2024-12-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/12/03/hello-world/" title="Hello World">Hello World</a><time datetime="2024-12-02T22:57:06.205Z" title="Created 2024-12-03 06:57:06">2024-12-03</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="footer-group-container"><div class="footer-group"><span class="footer-group-title">统计</span><a class="footer-group-item" href="/charts/">文章统计</a><a class="footer-group-item" href="/census/">博客统计</a></div><div class="footer-group"><span class="footer-group-title">导航</span><a class="footer-group-item" href="/link/#我的友链-amp-友链格式">申请友链</a><a class="footer-group-item" target="_blank" rel="noopener" href="https://github.com/Eurkon/hexo-theme-butterfly-eurkon">魔改源码</a><a class="footer-group-item" href="/stars/">网站收藏</a><a class="footer-group-item" href="javascript:toRandomPost();">随机文章</a></div><div class="footer-group"><span class="footer-group-title">分类</span><a class="footer-group-item" href="/Categories/学习笔记/">学习笔记</a><a class="footer-group-item" href="/Categories/魔改教程/">魔改教程</a><a class="footer-group-item" href="/Categories/分享转载/">分享转载</a><a class="footer-group-item" href="/Categories/作品案例/">作品案例</a></div><div class="footer-group"><span class="footer-group-title">关于</span><a class="footer-group-item" href="/notice/">网站公告</a><a class="footer-group-item" href="/update/">博客更新</a><a class="footer-group-item" href="/message/">给我留言</a><a class="footer-group-item" href="mailto:eurkon@foxmail.com">联系博主</a></div><div class="footer-group"><span class="footer-group-title">服务</span><a class="footer-group-item" href="/fcircle/">友链订阅</a><a class="footer-group-item" href="/rss.xml">RSS 订阅</a><a class="footer-group-item" href="/atom.xml">Atom 订阅</a><a class="footer-group-item" target="_blank" rel="noopener" href="https://bf.zzxworld.com/s/686">BlogFinder</a></div><div class="footer-group" id="footer-group-flink"><span class="footer-group-title">友链<i class="fas fa-sync" title="随机友链" onclick="eurkon.footerRandomFlink(flinks, 3);"></i></span><a class="footer-group-item" href="" target="_blank" rel="noopener external nofollow noreferrer">加载中...</a><a class="footer-group-item" href="" target="_blank" rel="noopener external nofollow noreferrer">加载中...</a><a class="footer-group-item" href="" target="_blank" rel="noopener external nofollow noreferrer">加载中...</a><a class="footer-group-item" href="/link/">更多友链</a></div><div class="footer-group"><span class="footer-group-title">协议</span><a class="footer-group-item" href="/protocol/comment/" title="用户发言前，请认真阅读本条例。一经发言，即视为同意接受本条例；如不同意，请勿发言。">评论协议</a><a class="footer-group-item" href="/protocol/copyright/" title="本站所有原创文章采用知识共享(Creative Commons)署名—非商业性使用—相同方式共享4.0国际公共许可协议">版权协议</a></div></div><div id="footer-banner"><div id="footer-banner-container"><div class="footer-banner"><div class="copyright">Copyright &copy; 2020 - 2025  DylanUnicorn.com  All Rights Reserved.</div></div><div class="footer-banner"><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div><div class="footer-banner"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn">粤ICP备2022108639号</a><a href="/protocol/copyright/" title="版权协议"><i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i><i class="fab fa-creative-commons-nc"></i><i class="fab fa-creative-commons-sa"></i></a></div></div></div></div></footer></div><div class="hidden" id="rightside-mask" onclick="eurkon.switchRightSide();"></div><div class="hidden" id="rightside"><div id="rightside-header"><div id="rightside-back"><i class="fas fa-chevron-left" onclick="eurkon.backRightSide();"></i></div><div id="rightside-title">Setting</div><div id="rightside-close" onclick="eurkon.switchRightSide();"><i class="fas fa-xmark"></i></div></div><div id="rightside-content"><div id="card-post-content"><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/Categories/C-template/"><span class="card-category-list-name">C++ template</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/Categories/%E5%88%86%E7%B1%BB/"><span class="card-category-list-name">分类</span><span class="card-category-list-count">1</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/C/" style="font-size: 1.1em; color: #999">C++</a> <a href="/tags/123/" style="font-size: 1.1em; color: #999">123</a> <a href="/tags/C-template/" style="font-size: 1.1em; color: #999">C++ template</a></div></div></div></div><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-sun"></i><i class="fas fa-moon"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div id="rightmenu"><div class="rightmenu-group rightmenu-small"><div class="rightmenu-item" id="menu-backward" onclick="window.history.back()"><i class="fas fa-arrow-left"></i></div><div class="rightmenu-item" id="menu-forward" onclick="window.history.forward()"><i class="fas fa-arrow-right"></i></div><div class="rightmenu-item" id="menu-refresh" onclick="location.reload()"><i class="fas fa-arrow-rotate-right"></i></div><div class="rightmenu-item" id="menu-top" onclick="btf.scrollToDest(0, 500)"><i class="fas fa-arrow-up"></i></div></div><div class="rightmenu-group rightmenu-line" id="rightmenu-text"><div class="rightmenu-item" id="menu-copy"><i class="fas fa-copy"></i><span>复制内容</span></div><div class="rightmenu-item" id="menu-comment"><i class="fas fa-comment"></i><span>引用评论</span></div><div class="rightmenu-item" id="menu-paste"><i class="fas fa-paste"></i><span>粘贴文本</span></div><div class="rightmenu-item" id="menu-search"><i class="fas fa-search"></i><span>在本站搜索</span></div><div class="rightmenu-item" id="menu-baidu"><i class="fas fa-search-plus"></i><span>去百度搜索</span></div></div><div class="rightmenu-group rightmenu-line" id="rightmenu-href"><div class="rightmenu-item" id="menu-copy-image"><i class="fas fa-copy"></i><span>复制图片</span></div><div class="rightmenu-item" id="menu-download-image"><i class="fas fa-download"></i><span>下载图片</span></div><div class="rightmenu-item" id="menu-link"><i class="fas fa-share"></i><span>分享链接</span></div><div class="rightmenu-item" id="menu-window"><i class="fas fa-window-restore"></i><span>新窗口打开</span></div></div><div class="rightmenu-group rightmenu-line" id="rightmenu-post"><a class="rightmenu-item" id="menu-random" href="/random/"><i class="fas fa-random"></i><span>随机文章</span></a><a class="rightmenu-item" id="menu-categories" href="/categories/"><i class="fas fa-shapes"></i><span>全部分类</span></a><a class="rightmenu-item" id="menu-tags" href="/tags/"><i class="fas fa-tags"></i><span>所有标签</span></a><div class="rightmenu-item" id="menu-share"><i class="fas fa-share-square"></i><span>分享本页</span></div></div><div class="rightmenu-group rightmenu-line" id="rightmenu-site"><a class="rightmenu-item" id="menu-message" href="/message/"><i class="fas fa-envelope"></i><span>留言信箱</span></a><a class="rightmenu-item" id="menu-about" href="/about/"><i class="fas fa-address-card"></i><span>关于本站</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="/js/eurkon/color-thief.min.js"></script><script defer src="/js/eurkon/eurkon.js"></script><script defer data-pjax src="/js/eurkon/refresh.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html><script>var posts=[{"title":"第一篇","path":"/2024/12/03/第一篇/","categories":[{"name":"分类","path":"/Categories/分类/"}],"tags":[{"name":"123","path":"/tags/123/"}],"cover":false,"date":"2024-12-02T23:32:42.000Z","updated":"2024-12-31T07:25:31.044Z"},{"title":"Hello World","path":"/2024/12/03/hello-world/","categories":[],"tags":[],"cover":false,"date":"2024-12-02T22:57:06.205Z","updated":"2024-12-02T22:57:06.205Z"},{"title":"My new post","path":"/2024/12/31/My-new-post/","categories":[],"tags":[],"cover":false,"date":"2024-12-31T06:47:20.000Z","updated":"2024-12-31T06:47:20.979Z"},{"title":"C++细说std::enable_if_t","path":"/2025/01/26/C-细说std-enable-if-t/","categories":[{"name":"C++ template","path":"/Categories/C-template/"}],"tags":[{"name":"C++ template","path":"/tags/C-template/"},{"name":"C++","path":"/tags/C/"}],"cover":false,"date":"2025-01-26T02:26:23.000Z","updated":"2025-01-26T02:31:45.371Z"},{"title":"","path":"/2024/12/31/数据结构-高精度加法/","categories":[],"tags":[],"cover":false,"date":"2024-12-31T08:49:48.111Z","updated":"2025-01-01T06:17:12.459Z"}];function toRandomPost(){ window.pjax ? pjax.loadUrl(posts[Math.floor(Math.random()*posts.length)].path) : window.open(posts[Math.floor(Math.random()*posts.length)].path, "_self"); };</script>
